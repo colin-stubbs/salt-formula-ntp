@@ -43,6 +43,8 @@ Tested on:
   - Windows 10 Pro
   - Windows Server 2016
   - MacOS 10.13.3
+  - Ubuntu 16.04.4 LTS
+  - Debian GNU/Linux 9.4 (stretch)
 
 Example State Application
 =========================
