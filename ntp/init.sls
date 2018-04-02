@@ -108,7 +108,7 @@ ntp_keys:
     {% endif %}
 {% endif %}
 
-{% if 'ntpdate' in ntp.settings and ntp.settings.ntpdate %}
+{% if 'ntpdate' in ntp.settings and ntp.settings.ntpdate and ntp.lookup.ntpdate_service != '' %}
 ntpdate:
   service.enabled:
     - name: {{ ntp.lookup.ntpdate_service }}
