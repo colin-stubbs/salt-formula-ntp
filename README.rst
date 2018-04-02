@@ -37,3 +37,8 @@ On Linux/other *nix variants:
   - Manages ntpd and ntp.conf file, if directed by pillar config
 
 For Linux; there is only a single state as regardless of whether you're running an NTP server or simply configuring a system as a client they all need to run ntpd (unless you only run ntpdate on boot). If you want a minion to function as an NTP server provide it a different pillar config to that given to a client-only system.
+
+Tested on:
+  - CentOS 7
+  - Windows 10 Pro
+  - MacOS 10.13.3
