@@ -41,4 +41,5 @@ For Linux; there is only a single state as regardless of whether you're running 
 Tested on:
   - CentOS 7
   - Windows 10 Pro
+  - Windows Server 2016
   - MacOS 10.13.3
