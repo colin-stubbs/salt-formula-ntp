@@ -1,0 +1,69 @@
+{% set default_driftfile =
+    '/var/lib/ntp/drift'
+      if grains['os_family'] == 'FreeBSD'
+      else '/var/lib/ntp/ntp.drift' %}
+{% set ntp = {
+    'lookup': salt['grains.filter_by']({
+        'Arch': {
+            'pkgs': [ 'ntp', 'ntpdate' ],
+            'service': 'ntpd',
+            'ntpdate_service': 'ntpdate',
+            'ntp_conf': '/etc/ntp.conf',
+            'keys_file': '/etc/ntp/keys',
+            'step_tickers': '/etc/ntp/step-tickers',
+        },
+        'Debian': {
+            'pkgs': [ 'ntp', 'ntpdate' ],
+            'service': 'ntp',
+            'ntpdate_service': 'ntpdate',
+            'ntp_conf': '/etc/ntp.conf',
+            'keys_file': '/etc/ntp/keys',
+            'step_tickers': '/etc/ntp/step-tickers',
+        },
+        'RedHat': {
+            'pkgs': [ 'ntp', 'ntpdate' ],
+            'service': 'ntpd',
+            'ntpdate_service': 'ntpdate',
+            'ntp_conf': '/etc/ntp.conf',
+            'keys_file': '/etc/ntp/keys',
+            'step_tickers': '/etc/ntp/step-tickers',
+        },
+        'Suse': {
+            'pkgs': [ 'ntp', 'ntpdate' ],
+            'service': salt['grains.filter_by']({
+                '11.3': 'ntp',
+                '11.4': 'ntp',
+                'default': 'ntpd',
+            }, grain='osrelease'),
+            'ntpdate_service': 'ntpdate',
+            'ntp_conf': '/etc/ntp.conf',
+            'keys_file': '/etc/ntp/keys',
+            'step_tickers': '/etc/ntp/step-tickers',
+        },
+        'FreeBSD': {
+            'service': 'ntpd',
+            'ntpdate_service': 'ntpdate',
+            'ntp_conf': '/etc/ntp.conf',
+            'keys_file': '/etc/ntp/keys',
+            'step_tickers': '/etc/ntp/step-tickers',
+        },
+        'Windows': {
+            'service': 'w32time',
+        },
+        'MacOS': {
+            'service': 'com.apple.timed',
+            'ntp_conf': '/private/etc/ntp.conf',
+        }
+    }, merge=salt['pillar.get']('ntp:lookup')),
+    'settings': salt['pillar.get']('ntp:settings', {
+        'ntpd': False,
+        'ntpdate': False,
+        'step_tickers': False,
+        'servers': [],
+        'servers_iburst': True,
+        'ntp_conf': {
+            'restrict': ['-4 default kod nomodify notrap nopeer noquery', '-6 default kod nomodify notrap nopeer noquery', '127.0.0.1', '::1'],
+            'driftfile': [ default_driftfile ]
+        }
+    }, merge=True)
+} %}

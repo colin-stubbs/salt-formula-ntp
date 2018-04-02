@@ -1,0 +1,51 @@
+ntp:
+  # OS-specific data that should, in most cases, be handled by map.jinja.
+  # It is an optional key and is only used to override defaults.
+  lookup:
+    package: ntp
+    ntpd_service: ntpd
+    ntpdate_service: ntpdate
+    ntp_conf: /etc/ntp.conf
+    step_tickers: /etc/ntp/step-tickers
+  # State-specific options
+  settings:
+    # If `True`, ntpdate service will be enabled
+    ntpdate: True
+    # If `True`, step tickers file will be configured based on server list
+    step_tickers: True
+    # If `True`, ntpd will be enabled. Otherwise ntp.conf will be configured
+    # but ntpd will not be enabled or started.
+    ntpd: True
+    # init_delay is used to wait for X seconds for service start
+    init_delay: 5
+    # List of servers to be used within step tickers file AND ntp.conf
+    # Also used directly on Windows as the NTP server list
+    # On MacOS only the first entry in the list will be utilised (MacOS limitation)
+    # NOTE: For ntpd you can add extra servers under ntp_conf
+    servers:
+      - '0.pool.ntp.org'
+      - '1.pool.ntp.org'
+    # If set to `True` servers added to ntp.conf from the list above will have 'iburst' appended to each
+    servers_iburst: True
+    # A dictionary of lists, each key corresponds to a conf-file directive in
+    # ntp.conf. Eg, the below will compile to:
+    #
+    #     server 0.us.pool.ntp.org
+    #     server 1.us.pool.ntp.org
+    #
+    #     restrict 127.0.0.1
+    #     restrict ::1
+    #
+    #     driftile: /var/lib/ntp/ntp.drift
+    ntp_conf:
+      restrict:
+        - '-4 default kod nomodify notrap nopeer noquery'
+        - '-6 default kod nomodify notrap nopeer noquery'
+        - '127.0.0.1'
+        - '::1'
+      driftfile: ['/var/lib/ntp/ntp.drift']
+    ntp_keys:
+      example_key:
+        id: 1
+        type: M
+        key: Example1234
